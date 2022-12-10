@@ -1,13 +1,18 @@
 // 載入 express 並建構應用程式伺服器
 const express = require('express')
-const exphbs = require('express-handlebars');
 const mongoose = require('mongoose') // 載入 mongoose
-const Todo = require('./models/todo') // 載入 Todo model
-const app = express()
+const exphbs = require('express-handlebars');
 // 引用 body-parser
 const bodyParser = require('body-parser')
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) // 設定連線到 mongoDB
+// // 引用 body-parser
+// const bodyParser = require('body-parser')
+
+const Todo = require('./models/todo') // 載入 Todo model
+
+const app = express()
+
+
 
 // 取得資料庫連線狀態
 const db = mongoose.connection
@@ -20,15 +25,16 @@ db.on('error', () => {
 db.once('open', () => {
   console.log('mongodb connected!')
 })
-app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
-app.set('view engine', 'hbs')
+
 // 加入這段 code, 僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
-// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }) // 設定連線到 mongoDB
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.set('view engine', 'hbs')
+// // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
-
 
 // 設定首頁路由
 // Todo 首頁
