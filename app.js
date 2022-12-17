@@ -1,6 +1,9 @@
 // 載入 express 並建構應用程式伺服器
 const express = require('express')
 const exphbs = require('express-handlebars');
+// 如果在 Heroku 環境則使用 process.env.PORT
+// 否則為本地環境，使用 3000 
+const PORT = process.env.PORT || 3000
 // 引用 body-parser
 const bodyParser = require('body-parser')
 // 載入 method-override
@@ -22,6 +25,6 @@ app.use(methodOverride('_method'))
 app.use(routes)
 
 // 設定 port 3000
-app.listen(3000, () => {
-  console.log('App is running on http://localhost:3000')
+app.listen(PORT, () => {
+  console.log(`App is running on http://localhost:${PORT}`)
 })
